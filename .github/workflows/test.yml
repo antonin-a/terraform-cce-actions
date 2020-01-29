@@ -33,3 +33,9 @@ jobs:
         FE_ACCESS_KEY_ID: ${{ secrets.FE_ACCESS_KEY_ID }}
         FE_SECRET_ACCESS_KEY: ${{ secrets.FE_SECRET_ACCESS_KEY }}
       run: terraform apply -auto-approve -input=false
+      
+    - name: Terraform destroy
+      env:
+        FE_ACCESS_KEY_ID: ${{ secrets.FE_ACCESS_KEY_ID }}
+        FE_SECRET_ACCESS_KEY: ${{ secrets.FE_SECRET_ACCESS_KEY }}
+      run: terraform destroy -auto-approve -input=false   
