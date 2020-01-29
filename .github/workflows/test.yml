@@ -1,6 +1,6 @@
 on:
   schedule:
-    - cron:  '/60 /12 * * *'
+    - cron:  '0 1,13 * * *'
 
 jobs:
   validate:
