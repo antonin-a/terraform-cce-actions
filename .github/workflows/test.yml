@@ -1,23 +1,35 @@
+name: Terraform Apply
 on:
   schedule:
     - cron:  '0 1,13 * * *'
-
 jobs:
-  validate:
-    name: Validate
+  terraform_apply:
     runs-on: ubuntu-latest
     steps:
-    - name: Check out code  
-      uses: actions/checkout@v1
+    - uses: actions/checkout@v1
 
-    - name: Run a Terraform init  
-      uses: docker://hashicorp/terraform:0.12.11
-      with:
-        entrypoint: terraform
-        args: init
+    - name: Install Terraform
+      env:
+        TERRAFORM_VERSION: "0.12.15"
+      run: |
+        tf_version=$TERRAFORM_VERSION
+        wget https://releases.hashicorp.com/terraform/"$tf_version"/terraform_"$tf_version"_linux_amd64.zip
+        unzip terraform_"$tf_version"_linux_amd64.zip
+        sudo mv terraform /usr/local/bin/
+    - name: Verify Terraform version
+      run: terraform --version
 
-    - name: Run a Terraform validate    
-      uses: docker://hashicorp/terraform:0.12.11
-      with:
-        entrypoint: terraform
-        args: validate
+    - name: Terraform init
+      env:
+        FE_ACCESS_KEY_ID: ${{ secrets.FE_ACCESS_KEY_ID }}
+        FE_SECRET_ACCESS_KEY: ${{ secrets.FE_SECRET_ACCESS_KEY }}
+      run: terraform init -input=false
+
+    - name: Terraform validation
+      run: terraform validate
+
+    - name: Terraform apply
+      env:
+        FE_ACCESS_KEY_ID: ${{ secrets.FE_ACCESS_KEY_ID }}
+        FE_SECRET_ACCESS_KEY: ${{ secrets.FE_SECRET_ACCESS_KEY }}
+      run: terraform apply -auto-approve -input=false
