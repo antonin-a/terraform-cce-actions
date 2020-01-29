@@ -2,7 +2,7 @@ provider "flexibleengine" {
   access_key  = ${{ secrets.FE_ACCESS_KEY_ID }}
   secret_key  = ${{ secrets.FE_SECRET_ACCESS_KEY }}
   domain_name = ${{ secrets.FE_DOMAIN_NAME }}
-  tenant_name = ${{ secrets.FE_PROJECT_NAME }}"
+  tenant_name = ${{ secrets.FE_PROJECT_NAME }}
   auth_url    = "https://iam.eu-west-0.prod-cloud-ocb.orange-business.com/v3"
   region      = "eu-west-0"
 }
