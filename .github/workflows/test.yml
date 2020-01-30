@@ -1,7 +1,8 @@
 name: Terraform Apply
 on:
-  schedule:
-    - cron:  '0 1,13 * * *'
+  push 
+  #schedule:
+  #  - cron:  '0 1,13 * * *'
 jobs:
   terraform_apply:
     runs-on: ubuntu-latest
@@ -23,6 +24,9 @@ jobs:
       env:
         OS_ACCESS_KEY: ${{ secrets.FE_ACCESS_KEY_ID }}
         OS_SECRET_KEY: ${{ secrets.FE_SECRET_ACCESS_KEY }}
+        OS_DOMAIN_NAME: ${{ secrets.FE_DOMAIN_NAME }}
+        OS_PROJECT_NAME: ${{ secrets.FE_PROJECT_NAME }}
+        TF_VAR_KEY_PAIR: ${{ secrets.FE_KEY_PAIR }}
       run: terraform init -input=false
 
     - name: Terraform validation
@@ -32,6 +36,8 @@ jobs:
       env:
         OS_ACCESS_KEY: ${{ secrets.FE_ACCESS_KEY_ID }}
         OS_SECRET_KEY: ${{ secrets.FE_SECRET_ACCESS_KEY }}
+        OS_DOMAIN_NAME: ${{ secrets.FE_DOMAIN_NAME }}
+        OS_PROJECT_NAME: ${{ secrets.FE_PROJECT_NAME }}
         TF_VAR_KEY_PAIR: ${{ secrets.FE_KEY_PAIR }}
       run: terraform apply -auto-approve -input=false
       
@@ -40,4 +46,6 @@ jobs:
         OS_ACCESS_KEY: ${{ secrets.FE_ACCESS_KEY_ID }}
         OS_SECRET_KEY: ${{ secrets.FE_SECRET_ACCESS_KEY }}
         TF_VAR_KEY_PAIR: ${{ secrets.FE_KEY_PAIR }}
+        OS_DOMAIN_NAME: ${{ secrets.FE_DOMAIN_NAME }}
+        OS_PROJECT_NAME: ${{ secrets.FE_PROJECT_NAME }}
       run: terraform destroy -auto-approve -input=false   
