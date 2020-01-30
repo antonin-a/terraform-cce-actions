@@ -26,7 +26,7 @@ jobs:
         OS_SECRET_KEY: ${{ secrets.FE_SECRET_ACCESS_KEY }}
         OS_DOMAIN_NAME: ${{ secrets.FE_DOMAIN_NAME }}
         OS_PROJECT_NAME: ${{ secrets.FE_PROJECT_NAME }}
-        TF_VAR_KEY_PAIR: ${{ secrets.FE_KEY_PAIR }}
+        TF_VAR_KEY_PAIR: ${{ secrets.FE_NET }}
       run: terraform init -input=false
 
     - name: Terraform validation
@@ -38,14 +38,16 @@ jobs:
         OS_SECRET_KEY: ${{ secrets.FE_SECRET_ACCESS_KEY }}
         OS_DOMAIN_NAME: ${{ secrets.FE_DOMAIN_NAME }}
         OS_PROJECT_NAME: ${{ secrets.FE_PROJECT_NAME }}
-        TF_VAR_KEY_PAIR: ${{ secrets.FE_KEY_PAIR }}
+        TF_VAR_VPC_ID: ${{ secrets.FE_VPC_ID }}
+        TF_VAR_NETWORK_ID: ${{ secrets.FE_NETWORK_ID }}
       run: terraform apply -auto-approve -input=false
       
     - name: Terraform destroy
       env:
         OS_ACCESS_KEY: ${{ secrets.FE_ACCESS_KEY_ID }}
         OS_SECRET_KEY: ${{ secrets.FE_SECRET_ACCESS_KEY }}
-        TF_VAR_KEY_PAIR: ${{ secrets.FE_KEY_PAIR }}
         OS_DOMAIN_NAME: ${{ secrets.FE_DOMAIN_NAME }}
         OS_PROJECT_NAME: ${{ secrets.FE_PROJECT_NAME }}
+        TF_VAR_VPC_ID: ${{ secrets.FE_VPC_ID }}
+        TF_VAR_NETWORK_ID: ${{ secrets.FE_NETWORK_ID }}
       run: terraform destroy -auto-approve -input=false   
