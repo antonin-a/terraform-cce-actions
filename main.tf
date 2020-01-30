@@ -8,8 +8,8 @@ resource "flexibleengine_cce_cluster_v3" "cluster_1" {
      cluster_type= "VirtualMachine"
      cluster_version="v1.13.10-r0"
      flavor_id= "cce.s1.small"
-     vpc_id= "$VPC_ID"
-     subnet_id= "$NETWORK_ID"
+     vpc_id= var.vpc_id
+     subnet_id= var.network_id
      container_network_type= "overlay_l2"
      authentication_mode = "rbac"
      description= "Cluster created using Github Actions"
