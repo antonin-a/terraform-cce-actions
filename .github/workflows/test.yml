@@ -30,14 +30,14 @@ jobs:
 
     - name: Terraform apply
       env:
-        FE_ACCESS_KEY_ID: ${{ secrets.FE_ACCESS_KEY_ID }}
-        FE_SECRET_ACCESS_KEY: ${{ secrets.FE_SECRET_ACCESS_KEY }}
+        OS_ACCESS_KEY: ${{ secrets.FE_ACCESS_KEY_ID }}
+        OS_SECRET_KEY: ${{ secrets.FE_SECRET_ACCESS_KEY }}
         TF_VAR_KEY_PAIR: ${{ secrets.FE_KEY_PAIR }}
       run: terraform apply -auto-approve -input=false
       
     - name: Terraform destroy
       env:
-        FE_ACCESS_KEY_ID: ${{ secrets.FE_ACCESS_KEY_ID }}
-        FE_SECRET_ACCESS_KEY: ${{ secrets.FE_SECRET_ACCESS_KEY }}
+        OS_ACCESS_KEY: ${{ secrets.FE_ACCESS_KEY_ID }}
+        OS_SECRET_KEY: ${{ secrets.FE_SECRET_ACCESS_KEY }}
         TF_VAR_KEY_PAIR: ${{ secrets.FE_KEY_PAIR }}
       run: terraform destroy -auto-approve -input=false   
