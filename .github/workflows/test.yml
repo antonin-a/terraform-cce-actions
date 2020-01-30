@@ -30,7 +30,10 @@ jobs:
       run: terraform init -input=false
 
     - name: Terraform validation
-      run: terraform validate
+      run: |
+        terraform validate
+        echo $VPC_ID
+        echo $NETWORK_ID
 
     - name: Terraform apply
       env:
