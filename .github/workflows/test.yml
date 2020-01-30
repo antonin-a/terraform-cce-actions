@@ -26,7 +26,7 @@ jobs:
         OS_SECRET_KEY: ${{ secrets.FE_SECRET_ACCESS_KEY }}
         OS_DOMAIN_NAME: ${{ secrets.FE_DOMAIN_NAME }}
         OS_PROJECT_NAME: ${{ secrets.FE_PROJECT_NAME }}
-        TF_VAR_KEY_PAIR: ${{ secrets.FE_NET }}
+        TF_VAR_KEY_PAIR: ${{ secrets.FE_NETWORK_ID }}
       run: terraform init -input=false
 
     - name: Terraform validation
