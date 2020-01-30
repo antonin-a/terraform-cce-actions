@@ -42,7 +42,7 @@ jobs:
         TF_VAR_NETWORK_ID: ${{ secrets.FE_NETWORK_ID }}
       run: |
         echo $TF_VAR_VPC_ID
-        terraform apply -auto-approve -input=false 
+        terraform apply -auto-approve -input=false -var="vpc_id=$TF_VAR_VPC_ID" -var="subnet_id=$TF_VAR_NETWORK_ID"
       
     - name: Terraform destroy
       env:
