@@ -30,10 +30,7 @@ jobs:
       run: terraform init -input=false
 
     - name: Terraform validation
-      run: |
-        terraform validate
-        echo $VPC_ID
-        echo $NETWORK_ID
+      run: terraform validate
 
     - name: Terraform apply
       env:
@@ -43,7 +40,9 @@ jobs:
         OS_PROJECT_NAME: ${{ secrets.FE_PROJECT_NAME }}
         TF_VAR_VPC_ID: ${{ secrets.FE_VPC_ID }}
         TF_VAR_NETWORK_ID: ${{ secrets.FE_NETWORK_ID }}
-      run: terraform apply -auto-approve -input=false
+      run: |
+        echo $TF_VAR_VPC_ID
+        terraform apply -auto-approve -input=false 
       
     - name: Terraform destroy
       env:
