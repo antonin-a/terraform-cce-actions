@@ -59,6 +59,5 @@ jobs:
       if: always()
       with:
         type: ${{ job.status }}
-        job_name: ':rocket: *Publish new release ${{ github.ref }}*'
-        channel: '#github_actions_cce'
+        job_name: 'TEST :rocket: *Publish new release ${{ github.ref }}*'
         url: ${{ secrets.ROCKETCHAT_WEBHOOK}}
