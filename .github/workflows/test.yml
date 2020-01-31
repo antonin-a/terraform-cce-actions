@@ -4,10 +4,10 @@ on:
   #schedule:
   #- cron:  '0 1,13 * * *'
 jobs:
-  Deploy CCE Cluster:
+  Deploy_CCE_Cluster:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v2
 
     - name: Install Terraform
       env:
@@ -41,11 +41,10 @@ jobs:
         TF_VAR_VPC_ID: ${{ secrets.FE_VPC_ID }}
         TF_VAR_NETWORK_ID: ${{ secrets.FE_NETWORK_ID }}
         TF_VAR_KEY_PAIR: ${{ secrets.FE_KEY_PAIR }}
-      run: |
-        echo $TF_VAR_VPC_ID
-        terraform apply -auto-approve -input=false -var="vpc_id=$TF_VAR_VPC_ID" -var="network_id=$TF_VAR_NETWORK_ID" -var="keypair=$TF_VAR_KEY_PAIR"
+      run: terraform apply -auto-approve -input=false -var="vpc_id=$TF_VAR_VPC_ID" -var="network_id=$TF_VAR_NETWORK_ID" -var="keypair=$TF_VAR_KEY_PAIR"
       
     - name: Terraform destroy
+      if: always()
       env:
         OS_ACCESS_KEY: ${{ secrets.FE_ACCESS_KEY_ID }}
         OS_SECRET_KEY: ${{ secrets.FE_SECRET_ACCESS_KEY }}
@@ -55,3 +54,11 @@ jobs:
         TF_VAR_NETWORK_ID: ${{ secrets.FE_NETWORK_ID }}
         TF_VAR_KEY_PAIR: ${{ secrets.FE_KEY_PAIR }}
       run: terraform destroy -auto-approve -input=false -var="vpc_id=$TF_VAR_VPC_ID" -var="network_id=$TF_VAR_NETWORK_ID" -var="keypair=$TF_VAR_KEY_PAIR"
+    - name: Rocket.Chat Notification
+      uses: RocketChat/Rocket.Chat.GitHub.Action.Notification@master
+      if: always()
+      with:
+        type: ${{ job.status }}
+        job_name: ':rocket: *Publish new release ${{ github.ref }}*'
+        channel: '#github_actions_cce'
+        url: ${{ secrets.ROCKETCHAT_WEBHOOK }}
