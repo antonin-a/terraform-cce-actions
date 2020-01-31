@@ -59,5 +59,7 @@ jobs:
       if: always()
       with:
         type: ${{ job.status }}
-        job_name: 'TEST :rocket: *Publish new release ${{ github.ref }}*'
-        url: ${{ secrets.ROCKETCHAT_WEBHOOK}}
+        job_name: '*Lint Check*'
+        url: ${{ secrets.ROCKETCHAT_WEBHOOK }}
+        commit: true
+        token: ${{ secrets.GITHUB_TOKEN }}
