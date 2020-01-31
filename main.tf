@@ -20,7 +20,7 @@ module "cce" {
 
   nodes_list = [
     {
-      node_name = "test_node1"
+      node_name = "test-node1"
       node_flavor = "s3.large.2"
       availability_zone = "eu-west-0a"
       key_pair = var.keypair
@@ -30,7 +30,7 @@ module "cce" {
       data_volume_size = 100
     },
     {
-      node_name = "test_node2"
+      node_name = "test-node2"
       node_flavor = "s3.large.2"
       availability_zone = "eu-west-0b"
       key_pair = var.keypair
