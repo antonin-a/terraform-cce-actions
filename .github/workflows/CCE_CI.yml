@@ -61,4 +61,4 @@ jobs:
         type: ${{ job.status }}
         job_name: ':rocket: *Publish new release ${{ github.ref }}*'
         channel: '#github_actions_cce'
-        url: ${{ secrets.ROCKETCHAT_WEBHOOK }}
+        url: ${{ secrets.ROCKETCHAT_WEBHOOK}}
