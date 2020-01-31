@@ -1,7 +1,8 @@
 name: Terraform Apply
 on:
-  schedule:
-  - cron:  '0 1,13 * * *'
+  push    
+  #schedule:
+  #- cron:  '0 1,13 * * *'
 jobs:
   terraform_apply:
     runs-on: ubuntu-latest
