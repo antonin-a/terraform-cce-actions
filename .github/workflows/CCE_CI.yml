@@ -1,8 +1,7 @@
 name: CCE CI
-on:
-  push    
-  #schedule:
-  #- cron:  '0 1,13 * * *'
+on:    
+  scheduled:
+  - cron:  '0 1,13 * * *'
 jobs:
   Deploy_CCE_Cluster:
     runs-on: ubuntu-latest
