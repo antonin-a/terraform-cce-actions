@@ -40,9 +40,10 @@ jobs:
         OS_PROJECT_NAME: ${{ secrets.FE_PROJECT_NAME }}
         TF_VAR_VPC_ID: ${{ secrets.FE_VPC_ID }}
         TF_VAR_NETWORK_ID: ${{ secrets.FE_NETWORK_ID }}
+        TF_VAR_KEY_PAIR: ${{ secrets.FE_NETWORK_ID }}
       run: |
         echo $TF_VAR_VPC_ID
-        terraform apply -auto-approve -input=false -var="vpc_id=$TF_VAR_VPC_ID" -var="network_id=$TF_VAR_NETWORK_ID"
+        terraform apply -auto-approve -input=false -var="vpc_id=$TF_VAR_VPC_ID" -var="network_id=$TF_VAR_NETWORK_ID" -var="keypair=$TF_VAR_KEY_PAIR"
       
     - name: Terraform destroy
       env:
@@ -52,4 +53,5 @@ jobs:
         OS_PROJECT_NAME: ${{ secrets.FE_PROJECT_NAME }}
         TF_VAR_VPC_ID: ${{ secrets.FE_VPC_ID }}
         TF_VAR_NETWORK_ID: ${{ secrets.FE_NETWORK_ID }}
-      run: terraform destroy -auto-approve -input=false -var="vpc_id=$TF_VAR_VPC_ID" -var="network_id=$TF_VAR_NETWORK_ID"  
+        TF_VAR_KEY_PAIR: ${{ secrets.FE_NETWORK_ID }}
+      run: terraform destroy -auto-approve -input=false -var="vpc_id=$TF_VAR_VPC_ID" -var="network_id=$TF_VAR_NETWORK_ID" -var="keypair=$TF_VAR_KEY_PAIR"
