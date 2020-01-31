@@ -9,8 +9,6 @@ module "cce" {
   
   cluster_name  = "cluster-tf-action"
   cluster_desc = "Cluster created using Github Actions"
-  availability_zone = "eu-west-0a"
-
   cluster_flavor = "cce.s1.small"
   vpc_id = var.vpc_id
   network_id = var.network_id  
