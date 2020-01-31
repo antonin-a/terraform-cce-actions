@@ -3,14 +3,41 @@ provider "flexibleengine" {
   region      = "eu-west-0"
 }
 
-resource "flexibleengine_cce_cluster_v3" "cluster_1" {
-     name = "cluster-tf-action"
-     cluster_type= "VirtualMachine"
-     cluster_version="v1.13.10-r0"
-     flavor_id= "cce.s1.small"
-     vpc_id= var.vpc_id
-     subnet_id= var.network_id
-     container_network_type= "overlay_l2"
-     authentication_mode = "rbac"
-     description= "Cluster created using Github Actions"
+module "cce" {
+  source  = "terraform-flexibleengine-modules/cce/flexibleengine"
+  version = "1.1.1"
+  
+  cluster_name  = "cluster-tf-action"
+  cluster_desc = "Cluster created using Github Actions"
+  availability_zone = "eu-west-0a"
+
+  cluster_flavor = "cce.s1.small"
+  vpc_id = var.vpc_id
+  network_id = var.network_id  
+  cluster_version = "v1.13.10-r0"
+
+  node_os = "EulerOS 2.5" 
+
+  nodes_list = [
+    {
+      node_name = "test_node1"
+      node_flavor = "s3.large.2"
+      availability_zone = "eu-west-0a"
+      key_pair = var.keypair
+      root_volume_type = "SATA"
+      root_volume_size = 40
+      data_volume_type = "SATA"
+      data_volume_size = 100
+    },
+    {
+      node_name = "test_node2"
+      node_flavor = "s3.large.2"
+      availability_zone = "eu-west-0b"
+      key_pair = var.keypair
+      root_volume_type = "SATA"
+      root_volume_size = 40
+      data_volume_type = "SATA"
+      data_volume_size = 100
     }
+  ]
+}
