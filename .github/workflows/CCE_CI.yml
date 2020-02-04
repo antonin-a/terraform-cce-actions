@@ -56,6 +56,7 @@ jobs:
 
         
     - name: 'Terraform Apply'
+      uses: hashicorp/terraform-github-actions@master
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         OS_ACCESS_KEY: ${{ secrets.FE_ACCESS_KEY_ID }}
@@ -70,6 +71,7 @@ jobs:
         tf_actions_subcommand: 'apply'
       
     - name: 'Terraform destroy'
+      uses: hashicorp/terraform-github-actions@master
       if: always()
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
