@@ -1,59 +1,90 @@
 name: CCE CI
 on:
-  push    
-  #schedule:
-  #- cron:  '0 1,13 * * *'
+  push:  
+  schedule:
+  - cron:  '0 1,13 * * *'
 jobs:
   Deploy_CCE_Cluster:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-
-    - name: Install Terraform
-      env:
-        TERRAFORM_VERSION: "0.12.15"
-      run: |
-        tf_version=$TERRAFORM_VERSION
-        wget https://releases.hashicorp.com/terraform/"$tf_version"/terraform_"$tf_version"_linux_amd64.zip
-        unzip terraform_"$tf_version"_linux_amd64.zip
-        sudo mv terraform /usr/local/bin/
-    - name: Verify Terraform version
-      run: terraform --version
-
-    - name: Terraform init
-      env:
-        OS_ACCESS_KEY: ${{ secrets.FE_ACCESS_KEY_ID }}
-        OS_SECRET_KEY: ${{ secrets.FE_SECRET_ACCESS_KEY }}
-        OS_DOMAIN_NAME: ${{ secrets.FE_DOMAIN_NAME }}
-        OS_PROJECT_NAME: ${{ secrets.FE_PROJECT_NAME }}
-        TF_VAR_KEY_PAIR: ${{ secrets.FE_NETWORK_ID }}
-      run: terraform init -input=false
-
-    - name: Terraform validation
-      run: terraform validate
-
-    - name: Terraform apply
-      env:
-        OS_ACCESS_KEY: ${{ secrets.FE_ACCESS_KEY_ID }}
-        OS_SECRET_KEY: ${{ secrets.FE_SECRET_ACCESS_KEY }}
-        OS_DOMAIN_NAME: ${{ secrets.FE_DOMAIN_NAME }}
-        OS_PROJECT_NAME: ${{ secrets.FE_PROJECT_NAME }}
-        TF_VAR_VPC_ID: ${{ secrets.FE_VPC_ID }}
-        TF_VAR_NETWORK_ID: ${{ secrets.FE_NETWORK_ID }}
-        TF_VAR_KEY_PAIR: ${{ secrets.FE_KEY_PAIR }}
-      run: terraform apply -auto-approve -input=false -var="vpc_id=$TF_VAR_VPC_ID" -var="network_id=$TF_VAR_NETWORK_ID" -var="keypair=$TF_VAR_KEY_PAIR"
+    - name: 'Checkout'
+      uses: actions/checkout@master
       
-    - name: Terraform destroy
+    - name: 'Terraform Format'
+      uses: hashicorp/terraform-github-actions@master
+      with:
+        tf_actions_version: 0.12.20
+        tf_actions_subcommand: 'fmt'
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: 'Terraform Init'
+      env:
+        OS_ACCESS_KEY: ${{ secrets.FE_ACCESS_KEY_ID }}
+        OS_SECRET_KEY: ${{ secrets.FE_SECRET_ACCESS_KEY }}
+        OS_DOMAIN_NAME: ${{ secrets.FE_DOMAIN_NAME }}
+        OS_PROJECT_NAME: ${{ secrets.FE_PROJECT_NAME }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      uses: hashicorp/terraform-github-actions@master
+      with:
+        tf_actions_version: 0.12.20
+        tf_actions_subcommand: 'init'
+
+
+    - name: 'Terraform Validate'
+      env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      uses: hashicorp/terraform-github-actions@master
+      with:
+          tf_actions_version: 0.12.20
+          tf_actions_subcommand: 'validate'
+          
+    - name: 'Terraform Plan'
+      uses: hashicorp/terraform-github-actions@master
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        OS_ACCESS_KEY: ${{ secrets.FE_ACCESS_KEY_ID }}
+        OS_SECRET_KEY: ${{ secrets.FE_SECRET_ACCESS_KEY }}
+        OS_DOMAIN_NAME: ${{ secrets.FE_DOMAIN_NAME }}
+        OS_PROJECT_NAME: ${{ secrets.FE_PROJECT_NAME }}
+        TF_VAR_vpc_id: ${{ secrets.FE_VPC_ID }}
+        TF_VAR_network_id: ${{ secrets.FE_NETWORK_ID }}
+        TF_VAR_keypair: ${{ secrets.FE_KEY_PAIR }}
+      with:
+        tf_actions_version: 0.12.20
+        tf_actions_subcommand: 'plan'
+
+        
+    - name: 'Terraform Apply'
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        OS_ACCESS_KEY: ${{ secrets.FE_ACCESS_KEY_ID }}
+        OS_SECRET_KEY: ${{ secrets.FE_SECRET_ACCESS_KEY }}
+        OS_DOMAIN_NAME: ${{ secrets.FE_DOMAIN_NAME }}
+        OS_PROJECT_NAME: ${{ secrets.FE_PROJECT_NAME }}
+        TF_VAR_vpc_id: ${{ secrets.FE_VPC_ID }}
+        TF_VAR_network_id: ${{ secrets.FE_NETWORK_ID }}
+        TF_VAR_keypair: ${{ secrets.FE_KEY_PAIR }}
+      with:
+        tf_actions_version: 0.12.20
+        tf_actions_subcommand: 'apply'
+      
+    - name: 'Terraform destroy'
       if: always()
       env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         OS_ACCESS_KEY: ${{ secrets.FE_ACCESS_KEY_ID }}
         OS_SECRET_KEY: ${{ secrets.FE_SECRET_ACCESS_KEY }}
         OS_DOMAIN_NAME: ${{ secrets.FE_DOMAIN_NAME }}
         OS_PROJECT_NAME: ${{ secrets.FE_PROJECT_NAME }}
-        TF_VAR_VPC_ID: ${{ secrets.FE_VPC_ID }}
-        TF_VAR_NETWORK_ID: ${{ secrets.FE_NETWORK_ID }}
-        TF_VAR_KEY_PAIR: ${{ secrets.FE_KEY_PAIR }}
-      run: terraform destroy -auto-approve -input=false -var="vpc_id=$TF_VAR_VPC_ID" -var="network_id=$TF_VAR_NETWORK_ID" -var="keypair=$TF_VAR_KEY_PAIR"
+        TF_VAR_vpc_id: ${{ secrets.FE_VPC_ID }}
+        TF_VAR_network_id: ${{ secrets.FE_NETWORK_ID }}
+        TF_VAR_keypair: ${{ secrets.FE_KEY_PAIR }}
+      with:
+        tf_actions_version: 0.12.20
+        tf_actions_subcommand: 'destroy'
+      #run: terraform destroy -auto-approve -input=false -var="vpc_id=$TF_VAR_VPC_ID" -var="network_id=$TF_VAR_NETWORK_ID" -var="keypair=$TF_VAR_KEY_PAIR"
+        
     - name: Rocket.Chat Notification
       uses: RocketChat/Rocket.Chat.GitHub.Action.Notification@master
       if: always()
