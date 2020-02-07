@@ -7,7 +7,7 @@ module "cce" {
   source  = "terraform-flexibleengine-modules/cce/flexibleengine"
   version = "1.1.1"
   
-  cluster_name  = "cluster-tf-action "
+  cluster_name  = "cluster-tf-action"
   cluster_desc = "Cluster created using Github Actions"
   cluster_flavor = "cce.s1.small"
   vpc_id = var.vpc_id
