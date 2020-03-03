@@ -1,6 +1,6 @@
 name: CCE CI
 on:
-  push:  
+  #push:  
   schedule:
   - cron:  '0 1,13 * * *'
 jobs:
