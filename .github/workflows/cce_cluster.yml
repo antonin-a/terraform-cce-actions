@@ -64,6 +64,7 @@ jobs:
         TF_VAR_vpc_id: ${{ secrets.FE_VPC_ID }}
         TF_VAR_network_id: ${{ secrets.FE_NETWORK_ID }}
         TF_VAR_keypair: ${{ secrets.FE_KEY_PAIR }}
+        TF_VAR_cluster_name: "CCE_cluster_actions_kubeCI"  
         TF_LOG: DEBUG 
         OS_DEBUG: true
       with:
