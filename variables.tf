@@ -12,3 +12,9 @@ variable "keypair" {
   description = "keypair for nodes"
   type        = string
 }
+
+variable "cluster_name" {
+  description = "keypair for nodes"
+  type        = string
+  default   = "cluster-tf-action"
+}
