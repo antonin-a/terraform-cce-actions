@@ -1,0 +1,116 @@
+name: CCE Cluster Deployment
+on:
+  repository_dispatch:
+  
+jobs:
+  Deploy_CCE_Cluster:
+    runs-on: ubuntu-latest
+    steps:
+    - name: 'Checkout'
+      uses: actions/checkout@master
+      
+    #- name: 'Terraform Format'
+     # uses: hashicorp/terraform-github-actions@master
+      #with:
+       # tf_actions_version: 0.12.20
+       # tf_actions_subcommand: 'fmt'
+      #env:
+        #GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: 'Terraform Init'
+      env:
+        OS_ACCESS_KEY: ${{ secrets.FE_ACCESS_KEY_ID }}
+        OS_SECRET_KEY: ${{ secrets.FE_SECRET_ACCESS_KEY }}
+        OS_DOMAIN_NAME: ${{ secrets.FE_DOMAIN_NAME }}
+        OS_PROJECT_NAME: ${{ secrets.FE_PROJECT_NAME }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      uses: hashicorp/terraform-github-actions@master
+      with:
+        tf_actions_version: latest
+        tf_actions_subcommand: 'init'
+
+
+    - name: 'Terraform Validate'
+      env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      uses: hashicorp/terraform-github-actions@master
+      with:
+          tf_actions_version: 0.12.20
+          tf_actions_subcommand: 'validate'
+          
+    - name: 'Terraform Plan'
+      uses: hashicorp/terraform-github-actions@master
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        OS_ACCESS_KEY: ${{ secrets.FE_ACCESS_KEY_ID }}
+        OS_SECRET_KEY: ${{ secrets.FE_SECRET_ACCESS_KEY }}
+        OS_DOMAIN_NAME: ${{ secrets.FE_DOMAIN_NAME }}
+        OS_PROJECT_NAME: ${{ secrets.FE_PROJECT_NAME }}
+        TF_VAR_vpc_id: ${{ secrets.FE_VPC_ID }}
+        TF_VAR_network_id: ${{ secrets.FE_NETWORK_ID }}
+        TF_VAR_keypair: ${{ secrets.FE_KEY_PAIR }}
+      with:
+        tf_actions_version: latest
+        tf_actions_subcommand: 'plan'
+        
+    - name: 'Terraform Apply'
+      uses: hashicorp/terraform-github-actions@master
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        OS_ACCESS_KEY: ${{ secrets.FE_ACCESS_KEY_ID }}
+        OS_SECRET_KEY: ${{ secrets.FE_SECRET_ACCESS_KEY }}
+        OS_DOMAIN_NAME: ${{ secrets.FE_DOMAIN_NAME }}
+        OS_PROJECT_NAME: ${{ secrets.FE_PROJECT_NAME }}
+        TF_VAR_vpc_id: ${{ secrets.FE_VPC_ID }}
+        TF_VAR_network_id: ${{ secrets.FE_NETWORK_ID }}
+        TF_VAR_keypair: ${{ secrets.FE_KEY_PAIR }}
+        TF_VAR_cluster_name: "CCE_cluster_actions_kubeCI"  
+        TF_LOG: DEBUG 
+        OS_DEBUG: true
+      with:
+        tf_actions_version: 0.12.20
+        tf_actions_subcommand: 'apply'
+        
+    - name: 'Terraform Plan Destroy'
+      if: always()
+      uses: hashicorp/terraform-github-actions@master
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        OS_ACCESS_KEY: ${{ secrets.FE_ACCESS_KEY_ID }}
+        OS_SECRET_KEY: ${{ secrets.FE_SECRET_ACCESS_KEY }}
+        OS_DOMAIN_NAME: ${{ secrets.FE_DOMAIN_NAME }}
+        OS_PROJECT_NAME: ${{ secrets.FE_PROJECT_NAME }}
+        TF_VAR_vpc_id: ${{ secrets.FE_VPC_ID }}
+        TF_VAR_network_id: ${{ secrets.FE_NETWORK_ID }}
+        TF_VAR_keypair: ${{ secrets.FE_KEY_PAIR }}
+      with:
+        tf_actions_version: latest
+        tf_actions_subcommand: 'plan'
+        args: '-destroy -out=./destroy-plan'
+        
+    - name: 'Terraform Apply Destroy'
+      if: always()
+      uses: hashicorp/terraform-github-actions@master
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        OS_ACCESS_KEY: ${{ secrets.FE_ACCESS_KEY_ID }}
+        OS_SECRET_KEY: ${{ secrets.FE_SECRET_ACCESS_KEY }}
+        OS_DOMAIN_NAME: ${{ secrets.FE_DOMAIN_NAME }}
+        OS_PROJECT_NAME: ${{ secrets.FE_PROJECT_NAME }}
+        TF_VAR_vpc_id: ${{ secrets.FE_VPC_ID }}
+        TF_VAR_network_id: ${{ secrets.FE_NETWORK_ID }}
+        TF_VAR_keypair: ${{ secrets.FE_KEY_PAIR }}
+      with:
+        tf_actions_version: latest
+        tf_actions_subcommand: 'apply'  
+        args: './destroy-plan'    
+      
+    - name: Rocket.Chat Notification
+      uses: RocketChat/Rocket.Chat.GitHub.Action.Notification@master
+      if: always()
+      with:
+        type: ${{ job.status }}
+        job_name: '*CCE CI result: *'
+        url: ${{ secrets.ROCKETCHAT_WEBHOOK }}
+        commit: true
+        token: ${{ secrets.GITHUB_TOKEN}}
