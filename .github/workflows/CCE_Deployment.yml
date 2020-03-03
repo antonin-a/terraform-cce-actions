@@ -54,6 +54,7 @@ jobs:
         tf_actions_subcommand: 'plan'
         
     - name: 'Terraform Apply'
+      if: github.event.action == 'deploy'
       uses: hashicorp/terraform-github-actions@master
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -64,7 +65,7 @@ jobs:
         TF_VAR_vpc_id: ${{ secrets.FE_VPC_ID }}
         TF_VAR_network_id: ${{ secrets.FE_NETWORK_ID }}
         TF_VAR_keypair: ${{ secrets.FE_KEY_PAIR }}
-        TF_VAR_cluster_name: "CCE_cluster_actions_kubeCI"  
+        TF_VAR_cluster_name: ${{ github.event.client_payload.cluster_name }} 
         TF_LOG: DEBUG 
         OS_DEBUG: true
       with:
