@@ -51,7 +51,7 @@ jobs:
         TF_VAR_network_id: ${{ secrets.FE_NETWORK_ID }}
         TF_VAR_keypair: ${{ secrets.FE_KEY_PAIR }}
       with:
-        tf_actions_version: latest
+        tf_actions_version: 0.12.20
         tf_actions_subcommand: 'plan'
         
     - name: 'Terraform Apply'
@@ -84,7 +84,7 @@ jobs:
         TF_VAR_network_id: ${{ secrets.FE_NETWORK_ID }}
         TF_VAR_keypair: ${{ secrets.FE_KEY_PAIR }}
       with:
-        tf_actions_version: latest
+        tf_actions_version: 0.12.20
         tf_actions_subcommand: 'plan'
         args: '-destroy -out=./destroy-plan'
         
@@ -101,7 +101,7 @@ jobs:
         TF_VAR_network_id: ${{ secrets.FE_NETWORK_ID }}
         TF_VAR_keypair: ${{ secrets.FE_KEY_PAIR }}
       with:
-        tf_actions_version: latest
+        tf_actions_version: 0.12.20
         tf_actions_subcommand: 'apply'  
         args: './destroy-plan'    
       
