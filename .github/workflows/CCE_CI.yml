@@ -27,7 +27,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       uses: hashicorp/terraform-github-actions@master
       with:
-        tf_actions_version: latest
+        tf_actions_version: 0.12.20
         tf_actions_subcommand: 'init'
 
 
@@ -36,7 +36,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       uses: hashicorp/terraform-github-actions@master
       with:
-          tf_actions_version: 0.13.0
+          tf_actions_version: 0.12.20
           tf_actions_subcommand: 'validate'
           
     - name: 'Terraform Plan'
@@ -68,7 +68,7 @@ jobs:
         TF_LOG: DEBUG 
         OS_DEBUG: true
       with:
-        tf_actions_version: 0.13.0
+        tf_actions_version: 0.12.20
         tf_actions_subcommand: 'apply'
         
     - name: 'Terraform Plan Destroy'
