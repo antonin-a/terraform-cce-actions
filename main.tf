@@ -5,7 +5,7 @@ provider "flexibleengine" {
 
 module "cce" {
   source  = "terraform-flexibleengine-modules/cce/flexibleengine"
-  version = "1.1.1"
+  version = "1.1.2"
   
   cluster_name  = var.cluster_name
   cluster_desc = "Cluster created using Github Actions"
