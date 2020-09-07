@@ -4,7 +4,7 @@ variable "network_id" {
 }
 
 variable "vpc_id" {
-  description = "ID of the Network"
+  description = "ID of the VPC"
   type        = string
 }
 
@@ -14,7 +14,7 @@ variable "keypair" {
 }
 
 variable "cluster_name" {
-  description = "keypair for nodes"
+  description = "Name of the CCE cluster"
   type        = string
   default   = "cluster-tf-action"
 }
