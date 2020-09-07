@@ -15,7 +15,7 @@ provider "flexibleengine" {
 
 module "cce" {
   source  = "FlexibleEngineCloud/cce/flexibleengine"
-  version = "2.0.1"
+  version = "2.0.2"
   
   cluster_name  = var.cluster_name
   cluster_desc = "Cluster created using Github Actions"
