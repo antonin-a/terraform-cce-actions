@@ -4,7 +4,7 @@ provider "flexibleengine" {
 }
 
 module "cce" {
-  source  = "terraform-flexibleengine-modules/cce/flexibleengine"
+  source  = "FlexibleEngineCloud/cce/flexibleengine"
   version = "2.0.1"
   
   cluster_name  = var.cluster_name
