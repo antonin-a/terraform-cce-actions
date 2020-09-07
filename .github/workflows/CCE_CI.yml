@@ -67,9 +67,8 @@ jobs:
       run : terraform apply
       id : apply
         
-    - name: 'Terraform Plan Destroy'
+    - name: 'Destroy'
       if: always()
-      uses: hashicorp/terraform-github-actions@master
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         OS_ACCESS_KEY: ${{ secrets.FE_ACCESS_KEY_ID }}
@@ -79,27 +78,8 @@ jobs:
         TF_VAR_vpc_id: ${{ secrets.FE_VPC_ID }}
         TF_VAR_network_id: ${{ secrets.FE_NETWORK_ID }}
         TF_VAR_keypair: ${{ secrets.FE_KEY_PAIR }}
-      with:
-        tf_actions_version: latest
-        tf_actions_subcommand: 'plan'
-        args: '-destroy -out=./destroy-plan'
-        
-    - name: 'Terraform Apply Destroy'
-      if: always()
-      uses: hashicorp/terraform-github-actions@master
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        OS_ACCESS_KEY: ${{ secrets.FE_ACCESS_KEY_ID }}
-        OS_SECRET_KEY: ${{ secrets.FE_SECRET_ACCESS_KEY }}
-        OS_DOMAIN_NAME: ${{ secrets.FE_DOMAIN_NAME }}
-        OS_PROJECT_NAME: ${{ secrets.FE_PROJECT_NAME }}
-        TF_VAR_vpc_id: ${{ secrets.FE_VPC_ID }}
-        TF_VAR_network_id: ${{ secrets.FE_NETWORK_ID }}
-        TF_VAR_keypair: ${{ secrets.FE_KEY_PAIR }}
-      with:
-        tf_actions_version: latest
-        tf_actions_subcommand: 'apply'  
-        args: './destroy-plan'    
+      run : terraform destroy
+      id : destroy  
       
     - name: Rocket.Chat Notification
       uses: RocketChat/Rocket.Chat.GitHub.Action.Notification@master
