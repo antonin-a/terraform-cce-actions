@@ -21,7 +21,7 @@ jobs:
     - uses: actions/checkout@v2
     - uses: hashicorp/setup-terraform@v1
       with:
-        terraform_version: latest
+        terraform_version: 0.13.2
     - name: 'Terraform Init'
       env:
         OS_ACCESS_KEY: ${{ secrets.FE_ACCESS_KEY_ID }}
