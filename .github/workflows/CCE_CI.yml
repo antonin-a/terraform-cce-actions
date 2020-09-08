@@ -64,7 +64,7 @@ jobs:
         TF_VAR_keypair: ${{ secrets.FE_KEY_PAIR }}
         TF_LOG: DEBUG 
         OS_DEBUG: true
-      run : terraform apply
+      run : terraform apply -auto-approve
       id : apply
         
     - name: 'Destroy'
@@ -78,7 +78,7 @@ jobs:
         TF_VAR_vpc_id: ${{ secrets.FE_VPC_ID }}
         TF_VAR_network_id: ${{ secrets.FE_NETWORK_ID }}
         TF_VAR_keypair: ${{ secrets.FE_KEY_PAIR }}
-      run : terraform destroy
+      run : terraform destroy -auto-approve
       id : destroy  
       
     - name: Rocket.Chat Notification
