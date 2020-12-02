@@ -22,7 +22,7 @@ module "cce" {
   cluster_flavor = "cce.s1.small"
   vpc_id = var.vpc_id
   network_id = var.network_id  
-  cluster_version = "v1.15.6-r1"
+  cluster_version = "v1.17.9-r0"
 
   node_os = "EulerOS 2.5" 
 
@@ -48,4 +48,7 @@ module "cce" {
       data_volume_size = 100
     }
   ]
+  Timeouts: &schema.ResourceTimeout{
+    Create: schema.DefaultTimeout(45 * time.Minute),
+  },
 }
