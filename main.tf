@@ -48,8 +48,4 @@ module "cce" {
       data_volume_size = 100
     }
   ]
-  timeouts {
-    create = "60m"
-    delete = "60m"
-  }
 }
