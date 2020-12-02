@@ -48,7 +48,8 @@ module "cce" {
       data_volume_size = 100
     }
   ]
-  Timeouts: &schema.ResourceTimeout{
-    Create: schema.DefaultTimeout(45 * time.Minute),
-  },
+  timeouts {
+    create = "60m"
+    delete = "60m"
+  }
 }
