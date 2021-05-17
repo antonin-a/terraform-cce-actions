@@ -2,7 +2,7 @@ terraform {
   required_providers {
     flexibleengine = {
       source = "FlexibleEngineCloud/flexibleengine"
-      version = "1.16.2"
+      #version = "1.16.2"
     }
   }
   required_version = ">= 0.13"
