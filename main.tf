@@ -22,7 +22,7 @@ module "cce" {
   cluster_flavor = "cce.s1.small"
   vpc_id = var.vpc_id
   network_id = var.network_id  
-  cluster_version = "v1.17.9-r0"
+  cluster_version = "v1.19.3-r0"
 
   node_os = "EulerOS 2.5" 
 
